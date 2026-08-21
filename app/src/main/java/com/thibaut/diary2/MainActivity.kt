@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             (binding.btnSave.parent as? androidx.cardview.widget.CardView)?.setCardBackgroundColor(accent)
             binding.tvAccentDot.setBackgroundColor(accent)
             binding.mainCard.setCardBackgroundColor(Color.WHITE)
-            (binding.mainCard as? androidx.cardview.widget.CardView)?.strokeColor = accent
+            (binding.mainCard as? androidx.cardview.widget.CardView)?.setStroke(2, accent)
         } catch(_:Exception){}
     }
     private fun addImageBlock(uri: Uri) {
