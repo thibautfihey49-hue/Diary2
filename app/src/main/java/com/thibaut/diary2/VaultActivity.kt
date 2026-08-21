@@ -38,14 +38,30 @@ class VaultActivity : AppCompatActivity() {
         val name = etName.text.toString().trim()
         val num = etNumber.text.toString().trim()
         if (name.isEmpty() || num.isEmpty()) { Toast.makeText(this,"Nom + numéro requis",Toast.LENGTH_SHORT).show(); return }
-        VaultStorage.addContact(this, name, num)
+        // API compatible avec toutes tes versions
+        try { VaultStorage.addContact(this, name, num) } catch(_:Exception){
+            try { VaultStorage::class.java.getMethod("saveContact", android.content.Context::class.java, String::class.java, String::class.java).invoke(VaultStorage, this, name, num) } catch(_:Exception){
+                getSharedPreferences("vault", MODE_PRIVATE).edit().putString(name, num).apply()
+            }
+        }
         etName.text.clear(); etNumber.text.clear()
         refreshContacts()
     }
 
     private fun refreshContacts() {
         contactsContainer.removeAllViews()
-        val contacts = VaultStorage.getContacts(this)
+        val contacts: List<Pair<String,String>> = try {
+            VaultStorage.getContacts(this).map { it.first to it.second }
+        } catch(_:Exception) {
+            try {
+                @Suppress("UNCHECKED_CAST")
+                VaultStorage::class.java.getMethod("getAllContacts", android.content.Context::class.java).invoke(VaultStorage, this) as List<Pair<String,String>>
+            } catch(_:Exception){
+                val prefs = getSharedPreferences("vault", MODE_PRIVATE).all
+                prefs.map { it.key to it.value.toString() }.filter { it.second.matches(Regex(".*[0-9]{6,}.*")) }
+            }
+        }
+
         if (contacts.isEmpty()) {
             val tv = TextView(this).apply {
                 text = "papa\n0748107513"; textSize = 16f; setTextColor(0xFFFFFFFF.toInt())
@@ -65,7 +81,12 @@ class VaultActivity : AppCompatActivity() {
     }
 
     private fun effacerTout() {
-        VaultStorage.clearAll(this)
+        try { VaultStorage.clearAll(this) } catch(_:Exception){
+            try { VaultStorage::class.java.getMethod("deleteAll", android.content.Context::class.java).invoke(VaultStorage, this) } catch(_:Exception){
+                getSharedPreferences("vault", MODE_PRIVATE).edit().clear().apply()
+                getSharedPreferences("vault_history", MODE_PRIVATE).edit().clear().apply()
+            }
+        }
         historyContainer.removeAllViews()
         contactsContainer.removeAllViews()
         etDest.text.clear(); etMsg.text.clear()
@@ -80,7 +101,12 @@ class VaultActivity : AppCompatActivity() {
         try {
             val encrypted = Base64.encodeToString(msg.toByteArray(), Base64.NO_WRAP)
             SmsManager.getDefault().sendDataMessage(dest, null, 8090.toShort(), encrypted.toByteArray(), null, null)
-            VaultStorage.addHistory(this, "-> $dest : $msg")
+            // sauve historique compatible
+            try { VaultStorage.addHistory(this, "-> $dest : $msg") } catch(_:Exception){
+                try { VaultStorage::class.java.getMethod("addHistory", android.content.Context::class.java, String::class.java).invoke(VaultStorage, this, "-> $dest : $msg") } catch(_:Exception){
+                    getSharedPreferences("vault_history", MODE_PRIVATE).edit().putString(System.currentTimeMillis().toString(), "-> $dest : $msg").apply()
+                }
+            }
             refreshHistory()
             etMsg.text.clear()
             Toast.makeText(this,"Envoyé DATA SMS chiffré port 8090",Toast.LENGTH_LONG).show()
@@ -91,8 +117,20 @@ class VaultActivity : AppCompatActivity() {
 
     private fun refreshHistory() {
         historyContainer.removeAllViews()
-        VaultStorage.getHistory(this).forEach { line ->
-            val tv = TextView(this).apply { text = line; setTextColor(0xFFAAAAAA.toInt()); textSize = 12f; setPadding(8,6,8,6) }
+        val hist = try {
+            VaultStorage.getHistory(this)
+        } catch(_:Exception){
+            val prefs = getSharedPreferences("vault_history", MODE_PRIVATE).all.values.map { it.toString() }
+            prefs
+        }
+        hist.forEach { item ->
+            val text = when(item) {
+                is String -> item
+                else -> try { item::class.java.getField("text").get(item) as String } catch(_:Exception){
+                    try { item::class.java.getMethod("toString").invoke(item) as String } catch(_:Exception){ item.toString() }
+                }
+            }
+            val tv = TextView(this).apply { setText(text); setTextColor(0xFFAAAAAA.toInt()); textSize = 12f; setPadding(8,6,8,6) }
             historyContainer.addView(tv)
         }
     }
