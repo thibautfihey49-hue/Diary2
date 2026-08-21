@@ -5,8 +5,7 @@
     android:orientation="vertical" android:background="#0A0A0F">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:layout_width="match_parent" android:layout_height="64dp"
-        android:background="#12121A" app:titleCentered="false">
+        android:layout_width="match_parent" android:layout_height="64dp" android:background="#12121A">
         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
             android:orientation="horizontal" android:gravity="center_vertical">
             <LinearLayout android:id="@+id/logoMoon" android:layout_width="0dp" android:layout_weight="1"
@@ -19,22 +18,19 @@
                     android:text=" MATERIAL 3" android:textColor="#FFD700" android:textSize="10sp" android:layout_marginStart="6dp"/>
             </LinearLayout>
             <com.google.android.material.button.MaterialButton android:id="@+id/btnTheme"
-                android:layout_width="44dp" android:layout_height="44dp"
-                app:icon="@android:drawable/ic_menu_preferences" app:iconPadding="0dp"
-                style="@style/Widget.Material3.Button.IconButton.FilledTonalButton" android:insetTop="0dp" android:insetBottom="0dp"/>
+                android:layout_width="44dp" android:layout_height="44dp" android:insetTop="0dp" android:insetBottom="0dp"
+                app:icon="@android:drawable/ic_menu_preferences" style="@style/Widget.Material3.Button.IconButton"/>
         </LinearLayout>
     </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout android:id="@+id/themePanel" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="vertical" android:background="#1A1A24" android:padding="16dp" android:visibility="gone">
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="THÈME MATERIAL 3" android:textColor="#888" android:textSize="11sp" android:letterSpacing="0.05"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="THÈME MATERIAL 3" android:textColor="#888" android:textSize="11sp"/>
         <com.google.android.material.chip.ChipGroup android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
-            <com.google.android.material.chip.Chip android:id="@+id/thObsidian" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Obsidian" style="@style/Widget.Material3.Chip.FilterChip"/>
-            <com.google.android.material.chip.Chip android:id="@+id/thNeon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Neon HUNTR/X" style="@style/Widget.Material3.Chip.FilterChip"/>
-            <com.google.android.material.chip.Chip android:id="@+id/thFrost" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Frost Glass" style="@style/Widget.Material3.Chip.FilterChip"/>
+            <com.google.android.material.chip.Chip android:id="@+id/thObsidian" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Obsidian"/>
+            <com.google.android.material.chip.Chip android:id="@+id/thNeon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Neon HUNTR/X"/>
+            <com.google.android.material.chip.Chip android:id="@+id/thFrost" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Frost Glass"/>
         </com.google.android.material.chip.ChipGroup>
-
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="COULEURS - TOUT MODIFIABLE" android:textColor="#888" android:textSize="11sp" android:layout_marginTop="16dp"/>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
             <View android:id="@+id/cGold" android:layout_width="48dp" android:layout_height="48dp" android:background="#FFD700"/>
@@ -44,7 +40,6 @@
             <View android:id="@+id/cGreen" android:layout_width="48dp" android:layout_height="48dp" android:background="#00FF88" android:layout_marginStart="10dp"/>
             <View android:id="@+id/cOrange" android:layout_width="48dp" android:layout_height="48dp" android:background="#FF6B35" android:layout_marginStart="10dp"/>
         </LinearLayout>
-
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FOND D'ÉCRAN" android:textColor="#888" android:textSize="11sp" android:layout_marginTop="16dp"/>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
             <com.google.android.material.button.MaterialButton android:id="@+id/wObsidian" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp" android:text="Noir" style="@style/Widget.Material3.Button.TonalButton"/>
@@ -64,16 +59,15 @@
                     <LinearLayout android:id="@+id/blocksContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp"/>
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="20dp">
                         <com.google.android.material.button.MaterialButton android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
-                            app:icon="@android:drawable/ic_menu_camera" android:text="Image" style="@style/Widget.Material3.Button.TonalButton"/>
+                            android:text="Image" style="@style/Widget.Material3.Button.TonalButton"/>
                         <com.google.android.material.button.MaterialButton android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
-                            app:icon="@android:drawable/ic_btn_speak_now" android:text="Voix" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button.TonalButton"/>
+                            android:text="Voix" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button.TonalButton"/>
                         <com.google.android.material.button.MaterialButton android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1.2" android:layout_height="56dp"
-                            android:text="Sauver" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button.FilledButton"/>
+                            android:text="Sauver" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button"/>
                     </LinearLayout>
                     <TextView android:id="@+id/tvRecordingStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textColor="#FF69B4" android:textSize="12sp" android:layout_marginTop="10dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
             <androidx.recyclerview.widget.RecyclerView android:id="@+id/timeline"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" android:layout_marginTop="20dp"/>
         </LinearLayout>
