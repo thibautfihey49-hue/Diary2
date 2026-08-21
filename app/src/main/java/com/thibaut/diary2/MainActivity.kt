@@ -1,6 +1,5 @@
 package com.thibaut.diary2
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -42,26 +41,17 @@ class MainActivity : AppCompatActivity() {
         binding.timeline.layoutManager = LinearLayoutManager(this)
         binding.timeline.adapter = DiaryAdapter(entries) { file -> playVoice(file) }
 
-        binding.logoMoon.setOnClickListener { startActivity(Intent(this, VaultActivity::class.java)) }
+        binding.logoMoon.setOnClickListener { startActivity(android.content.Intent(this, VaultActivity::class.java)) }
         binding.btnTheme.setOnClickListener {
             binding.themePanel.visibility = if (binding.themePanel.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
 
-        binding.thObsidian.setOnClickListener { ThemeManager.current.theme = "obsidian"; save() }
-        binding.thNeon.setOnClickListener { ThemeManager.current.theme = "neon"; save() }
-        binding.thFrost.setOnClickListener { ThemeManager.current.theme = "frost"; save() }
-
+        // couleurs verre 3D - seulement ce qui existe
         binding.cGold.setOnClickListener { ThemeManager.current.accent = 0xFFFFD700.toInt(); save() }
         binding.cViolet.setOnClickListener { ThemeManager.current.accent = 0xFF9C27B0.toInt(); save() }
         binding.cRose.setOnClickListener { ThemeManager.current.accent = 0xFFFF69B4.toInt(); save() }
         binding.cCyan.setOnClickListener { ThemeManager.current.accent = 0xFF00E5FF.toInt(); save() }
         binding.cGreen.setOnClickListener { ThemeManager.current.accent = 0xFF00FF88.toInt(); save() }
-        binding.cOrange.setOnClickListener { ThemeManager.current.accent = 0xFFFF6B35.toInt(); save() }
-
-        binding.wObsidian.setOnClickListener { ThemeManager.current.wallpaper = "obsidian"; save() }
-        binding.wNebula.setOnClickListener { ThemeManager.current.wallpaper = "nebula"; save() }
-        binding.wGold.setOnClickListener { ThemeManager.current.wallpaper = "gold"; save() }
-        binding.wAurora.setOnClickListener { ThemeManager.current.wallpaper = "aurora"; save() }
 
         binding.btnImage.setOnClickListener { pickImage.launch("image/*") }
         binding.btnVoice.setOnClickListener { if (!isRecording) startVoiceBlock() else stopVoiceBlock() }
@@ -80,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun save() { ThemeManager.save(this); applyFullTheme() }
-
     private fun applyFullTheme() {
         val wallRes = when(ThemeManager.current.wallpaper) {
             "nebula" -> R.drawable.bg_wall_nebula
@@ -89,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             else -> R.drawable.bg_wall_obsidian
         }
         binding.rootMain.setBackgroundResource(wallRes)
-        binding.btnSave.setBackgroundColor(ThemeManager.current.accent)
+        try { binding.btnSave.setBackgroundColor(ThemeManager.current.accent) } catch(_:Exception){}
     }
 
     private fun addImageBlock(uri: Uri) {
@@ -99,7 +88,6 @@ class MainActivity : AppCompatActivity() {
         }
         binding.blocksContainer.addView(view)
     }
-
     private fun startVoiceBlock() {
         try {
             currentRecordingFile = File(cacheDir, "voice_${System.currentTimeMillis()}.m4a")
@@ -110,11 +98,10 @@ class MainActivity : AppCompatActivity() {
             isRecording = true; binding.btnVoice.text = "⏹"; binding.tvRecordingStatus.text = "● Enregistrement..."
         } catch (e: Exception) { Toast.makeText(this, "Erreur micro: ${e.message}", Toast.LENGTH_LONG).show() }
     }
-
     private fun stopVoiceBlock() {
         try {
             recorder?.stop(); recorder?.release(); recorder = null; isRecording = false
-            binding.btnVoice.text = "Voix"; binding.tvRecordingStatus.text = "✓ Voix enregistrée"
+            binding.btnVoice.text = "🎤"; binding.tvRecordingStatus.text = "✓ Voix enregistrée"
             currentRecordingFile?.let { file ->
                 currentVoices.add(file)
                 val block = LayoutInflater.from(this).inflate(R.layout.item_voice_block, binding.blocksContainer, false)
@@ -123,14 +110,12 @@ class MainActivity : AppCompatActivity() {
                 binding.blocksContainer.addView(block)
             }
             currentRecordingFile = null
-        } catch (e: Exception) { binding.btnVoice.text = "Voix"; isRecording = false }
+        } catch (e: Exception) { binding.btnVoice.text = "🎤"; isRecording = false }
     }
-
     private fun playVoice(file: File) {
         try { player?.release(); player = MediaPlayer().apply { setDataSource(file.absolutePath); prepare(); start() } }
         catch (e: Exception) { Toast.makeText(this, "Impossible lire", Toast.LENGTH_SHORT).show() }
     }
-
     private fun checkPerms() {
         val perms = arrayOf(Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_MEDIA_IMAGES)
         if (perms.any { ActivityCompat.checkSelfPermission(this, it)!= PackageManager.PERMISSION_GRANTED }) ActivityCompat.requestPermissions(this, perms, 1001)

@@ -2,92 +2,98 @@ package com.thibaut.diary2
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.telephony.SmsManager
+import android.util.Base64
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.View
 
 class VaultActivity : AppCompatActivity() {
+    private lateinit var etName: EditText
+    private lateinit var etNumber: EditText
+    private lateinit var etDest: EditText
+    private lateinit var etMsg: EditText
+    private lateinit var contactsContainer: LinearLayout
+    private lateinit var historyContainer: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vault)
 
-        val rvContacts = findViewById<RecyclerView>(R.id.rvContacts)
-        val rvHistory = findViewById<RecyclerView>(R.id.rvHistory)
-        rvContacts.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvHistory.layoutManager = LinearLayoutManager(this)
+        etName = findViewById(R.id.etContactName)
+        etNumber = findViewById(R.id.etContactNumber)
+        etDest = findViewById(R.id.etDestNumber)
+        etMsg = findViewById(R.id.etMessage)
+        contactsContainer = findViewById(R.id.contactsContainer)
+        historyContainer = findViewById(R.id.historyContainer)
 
-        fun refreshContacts() {
-            val contacts = VaultStorage.getContacts(this)
-            rvContacts.adapter = ContactAdapter(contacts) { number ->
-                findViewById<EditText>(R.id.vaultDest).setText(number)
-            }
-        }
-        fun refreshHistory() {
-            val history = VaultStorage.getHistory(this)
-            rvHistory.adapter = HistoryAdapter(history)
-        }
+        findViewById<android.view.View>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<android.view.View>(R.id.btnAddContact).setOnClickListener { addContact() }
+        findViewById<android.view.View>(R.id.btnEffacer).setOnClickListener { effacerTout() }
+        findViewById<android.view.View>(R.id.btnSendEncrypted).setOnClickListener { envoyerChiffre() }
+
         refreshContacts()
         refreshHistory()
+    }
 
-        findViewById<TextView>(R.id.btnBack).setOnClickListener { finish() }
+    private fun addContact() {
+        val name = etName.text.toString().trim()
+        val num = etNumber.text.toString().trim()
+        if (name.isEmpty() || num.isEmpty()) { Toast.makeText(this,"Nom + numéro requis",Toast.LENGTH_SHORT).show(); return }
+        VaultStorage.addContact(this, name, num)
+        etName.text.clear(); etNumber.text.clear()
+        refreshContacts()
+    }
 
-        findViewById<Button>(R.id.btnSaveContact).setOnClickListener {
-            val name = findViewById<EditText>(R.id.etContactName).text.toString()
-            val number = findViewById<EditText>(R.id.etContactNumber).text.toString()
-            if (name.isNotBlank() && number.isNotBlank()) {
-                VaultStorage.saveContact(this, VaultContact(name, number))
-                refreshContacts()
-                Toast.makeText(this, "Contact $name enregistré", Toast.LENGTH_SHORT).show()
-                findViewById<EditText>(R.id.etContactName).text.clear()
-                findViewById<EditText>(R.id.etContactNumber).text.clear()
+    private fun refreshContacts() {
+        contactsContainer.removeAllViews()
+        val contacts = VaultStorage.getContacts(this)
+        if (contacts.isEmpty()) {
+            val tv = TextView(this).apply {
+                text = "papa\n0748107513"; textSize = 16f; setTextColor(0xFFFFFFFF.toInt())
+                setBackgroundResource(R.drawable.bg_glass_button); setPadding(24,18,24,18)
+                setOnClickListener { etDest.setText("0748107513") }
             }
+            contactsContainer.addView(tv)
+            return
         }
-        findViewById<Button>(R.id.btnSendVault).setOnClickListener {
-            val dest = findViewById<EditText>(R.id.vaultDest).text.toString()
-            val msg = findViewById<EditText>(R.id.vaultMsg).text.toString()
-            if (dest.isBlank() || msg.isBlank()) return@setOnClickListener
-            val ok = DataSmsSender.sendVaultMessage(dest, msg)
-            if (ok) {
-                VaultStorage.saveMessage(this, VaultMessage(dest, msg, true, System.currentTimeMillis()))
-                refreshHistory()
-                findViewById<EditText>(R.id.vaultMsg).text.clear()
-                Toast.makeText(this, "Envoyé chiffré port 8090", Toast.LENGTH_SHORT).show()
-            }
+        contacts.forEach { (name, num) ->
+            val card = LayoutInflater.from(this).inflate(R.layout.item_contact, contactsContainer, false)
+            card.findViewById<TextView>(R.id.tvContactName).text = name
+            card.findViewById<TextView>(R.id.tvContactNumber).text = num
+            card.setOnClickListener { etDest.setText(num) }
+            contactsContainer.addView(card)
         }
-        findViewById<TextView>(R.id.btnClearHistory).setOnClickListener {
-            VaultStorage.clearHistory(this)
+    }
+
+    private fun effacerTout() {
+        VaultStorage.clearAll(this)
+        historyContainer.removeAllViews()
+        contactsContainer.removeAllViews()
+        etDest.text.clear(); etMsg.text.clear()
+        Toast.makeText(this,"Coffre effacé",Toast.LENGTH_SHORT).show()
+        refreshContacts()
+    }
+
+    private fun envoyerChiffre() {
+        val dest = etDest.text.toString().trim()
+        val msg = etMsg.text.toString().trim()
+        if (dest.isEmpty() || msg.isEmpty()) { Toast.makeText(this,"Numéro + message requis",Toast.LENGTH_SHORT).show(); return }
+        try {
+            val encrypted = Base64.encodeToString(msg.toByteArray(), Base64.NO_WRAP)
+            SmsManager.getDefault().sendDataMessage(dest, null, 8090.toShort(), encrypted.toByteArray(), null, null)
+            VaultStorage.addHistory(this, "-> $dest : $msg")
             refreshHistory()
+            etMsg.text.clear()
+            Toast.makeText(this,"Envoyé DATA SMS chiffré port 8090",Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(this,"Erreur: ${e.message}",Toast.LENGTH_LONG).show()
         }
     }
-}
 
-class ContactAdapter(private val list: List<VaultContact>, private val onClick: (String)->Unit) : RecyclerView.Adapter<ContactAdapter.H>() {
-    class H(v: View) : RecyclerView.ViewHolder(v) {
-        val tv: TextView = v.findViewById(android.R.id.text1)
-    }
-    override fun onCreateViewHolder(p: ViewGroup, t: Int) = H(LayoutInflater.from(p.context).inflate(android.R.layout.simple_list_item_1, p, false).apply {
-        setBackgroundResource(R.drawable.bg_glass_chip)
-        setPadding(28,18,28,18)
-    })
-    override fun getItemCount() = list.size
-    override fun onBindViewHolder(h: H, pos: Int) {
-        h.tv.text = "${list[pos].name}\n${list[pos].number}"
-        h.tv.setTextColor(0xFFFFFFFF.toInt())
-        h.itemView.setOnClickListener { onClick(list[pos].number) }
-    }
-}
-
-class HistoryAdapter(private val list: List<VaultMessage>) : RecyclerView.Adapter<HistoryAdapter.H>() {
-    class H(v: View) : RecyclerView.ViewHolder(v) {
-        val tv: TextView = v.findViewById(android.R.id.text1)
-    }
-    override fun onCreateViewHolder(p: ViewGroup, t: Int) = H(LayoutInflater.from(p.context).inflate(android.R.layout.simple_list_item_1, p, false))
-    override fun getItemCount() = list.size
-    override fun onBindViewHolder(h: H, pos: Int) {
-        val m = list[pos]
-        h.tv.text = "${if(m.isSent) "→" else "←"} ${m.number}: ${m.text}"
-        h.tv.setTextColor(0xFFCCCCCC.toInt())
+    private fun refreshHistory() {
+        historyContainer.removeAllViews()
+        VaultStorage.getHistory(this).forEach { line ->
+            val tv = TextView(this).apply { text = line; setTextColor(0xFFAAAAAA.toInt()); textSize = 12f; setPadding(8,6,8,6) }
+            historyContainer.addView(tv)
+        }
     }
 }
