@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.View
 
 class VaultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +31,8 @@ class VaultActivity : AppCompatActivity() {
         refreshContacts()
         refreshHistory()
 
-        findViewById<ViewGroup>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<TextView>(R.id.btnBack).setOnClickListener { finish() }
+
         findViewById<Button>(R.id.btnSaveContact).setOnClickListener {
             val name = findViewById<EditText>(R.id.etContactName).text.toString()
             val number = findViewById<EditText>(R.id.etContactNumber).text.toString()
@@ -38,6 +40,8 @@ class VaultActivity : AppCompatActivity() {
                 VaultStorage.saveContact(this, VaultContact(name, number))
                 refreshContacts()
                 Toast.makeText(this, "Contact $name enregistré", Toast.LENGTH_SHORT).show()
+                findViewById<EditText>(R.id.etContactName).text.clear()
+                findViewById<EditText>(R.id.etContactNumber).text.clear()
             }
         }
         findViewById<Button>(R.id.btnSendVault).setOnClickListener {
@@ -60,11 +64,12 @@ class VaultActivity : AppCompatActivity() {
 }
 
 class ContactAdapter(private val list: List<VaultContact>, private val onClick: (String)->Unit) : RecyclerView.Adapter<ContactAdapter.H>() {
-    class H(v: android.view.View) : RecyclerView.ViewHolder(v) {
+    class H(v: View) : RecyclerView.ViewHolder(v) {
         val tv: TextView = v.findViewById(android.R.id.text1)
     }
     override fun onCreateViewHolder(p: ViewGroup, t: Int) = H(LayoutInflater.from(p.context).inflate(android.R.layout.simple_list_item_1, p, false).apply {
-        setBackgroundColor(0xFF1A1A24.toInt()); setPadding(24,16,24,16)
+        setBackgroundResource(R.drawable.bg_glass_chip)
+        setPadding(28,18,28,18)
     })
     override fun getItemCount() = list.size
     override fun onBindViewHolder(h: H, pos: Int) {
@@ -75,7 +80,7 @@ class ContactAdapter(private val list: List<VaultContact>, private val onClick: 
 }
 
 class HistoryAdapter(private val list: List<VaultMessage>) : RecyclerView.Adapter<HistoryAdapter.H>() {
-    class H(v: android.view.View) : RecyclerView.ViewHolder(v) {
+    class H(v: View) : RecyclerView.ViewHolder(v) {
         val tv: TextView = v.findViewById(android.R.id.text1)
     }
     override fun onCreateViewHolder(p: ViewGroup, t: Int) = H(LayoutInflater.from(p.context).inflate(android.R.layout.simple_list_item_1, p, false))
@@ -83,6 +88,6 @@ class HistoryAdapter(private val list: List<VaultMessage>) : RecyclerView.Adapte
     override fun onBindViewHolder(h: H, pos: Int) {
         val m = list[pos]
         h.tv.text = "${if(m.isSent) "→" else "←"} ${m.number}: ${m.text}"
-        h.tv.setTextColor(0xFFAAAAAA.toInt())
+        h.tv.setTextColor(0xFFCCCCCC.toInt())
     }
 }

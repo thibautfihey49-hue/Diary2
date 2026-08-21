@@ -1,5 +1,9 @@
 <resources>
-    <style name="Theme.Diary2" parent="Theme.Material3.DayNight">
-        <item name="colorPrimary">#9C27B0</item>
+    <style name="Theme.Diary2" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#FFD700</item>
+        <item name="colorPrimaryContainer">#1A1A24</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:statusBarColor">#0A0A0F</item>
+        <item name="android:navigationBarColor">#0A0A0F</item>
     </style>
 </resources>
