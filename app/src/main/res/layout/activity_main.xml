@@ -1,63 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#0A0A0F">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="#0A0A0F">
 
-    <!-- Header -->
     <LinearLayout android:layout_width="match_parent" android:layout_height="64dp"
         android:orientation="horizontal" android:gravity="center_vertical"
         android:paddingHorizontal="20dp" android:background="#12121A">
-        <TextView android:id="@+id/logoMoon" android:layout_width="0dp" android:layout_weight="1"
-            android:layout_height="wrap_content" android:text="🌙 HUNTR/X JOURNAL ADULTE"
-            android:textColor="#FFD700" android:textSize="16sp" android:textStyle="bold"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="18+ • Vault 8090" android:textColor="#FF69B4" android:textSize="10sp"/>
-    </LinearLayout>
-
-    <!-- Editeur -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical" android:background="#1A1A24"
-        android:layout_margin="16dp" android:padding="16dp">
-        <EditText android:id="@+id/entryText" android:layout_width="match_parent"
-            android:layout_height="100dp" android:background="@null"
-            android:hint="Écris ton entrée..." android:textColor="#FFFFFF"
-            android:textColorHint="#55556A" android:textSize="15sp"/>
-        <!-- Blocs intégrés dans la note -->
-        <LinearLayout android:id="@+id/blocksContainer" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp"/>
-        <!-- Toolbar inline -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:layout_marginTop="12dp">
-            <Button android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1"
-                android:layout_height="44dp" android:text="📷 Image" android:textColor="#FFFFFF"
-                android:backgroundTint="#2A2A3A"/>
-            <Button android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1"
-                android:layout_height="44dp" android:text="🎤 Voix" android:textColor="#FFFFFF"
-                android:backgroundTint="#2A2A3A" android:layout_marginStart="8dp"/>
-            <Button android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1"
-                android:layout_height="44dp" android:text="Sauver" android:textColor="#000000"
-                android:backgroundTint="#FFD700" android:layout_marginStart="8dp"/>
+        <LinearLayout android:id="@+id/logoMoon" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical">
+            <TextView android:layout_width="32dp" android:layout_height="32dp"
+                android:text="🌙" android:textSize="20sp" android:background="#1E1E2E" android:gravity="center"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text=" HUNTR/X JOURNAL" android:textColor="#FFFFFF" android:textStyle="bold" android:layout_marginStart="8dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text=" GLASS" android:textColor="#FFD700" android:textSize="10sp"/>
         </LinearLayout>
+        <TextView android:layout_width="8dp" android:layout_height="8dp" android:background="#00FF88"/>
     </LinearLayout>
 
-    <!-- Timeline -->
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/timeline"
-        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
-        android:padding="16dp" android:clipToPadding="false"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:background="#1A1A24" android:padding="16dp">
+                <EditText android:id="@+id/entryText" android:layout_width="match_parent"
+                    android:layout_height="100dp" android:background="@null"
+                    android:hint="Écris ton entrée secrète..." android:textColor="#FFF" android:textColorHint="#55556A"/>
+                <LinearLayout android:id="@+id/blocksContainer" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="16dp">
+                    <Button android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
+                        android:text="📷 Image" android:backgroundTint="#232334" android:textColor="#FFF"/>
+                    <Button android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
+                        android:text="🎤 Voix" android:backgroundTint="#232334" android:textColor="#FFF" android:layout_marginStart="8dp"/>
+                    <Button android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
+                        android:text="Sauver" android:backgroundTint="#FFD700" android:textColor="#000" android:layout_marginStart="8dp"/>
+                </LinearLayout>
+                <TextView android:id="@+id/tvRecordingStatus" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="" android:textColor="#FF69B4" android:textSize="12sp" android:layout_marginTop="8dp"/>
+            </LinearLayout>
 
-    <!-- Coffre privé repliable -->
-    <LinearLayout android:id="@+id/vaultSection" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:orientation="vertical"
-        android:background="#12121A" android:padding="12dp">
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="COFFRE PRIVE DATA SMS port 8090" android:textColor="#FF69B4" android:textSize="11sp" android:textStyle="bold"/>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
-            <EditText android:id="@+id/vaultDest" android:layout_width="0dp" android:layout_weight="1"
-                android:layout_height="40dp" android:hint="Numéro" android:textColor="#FFF" android:textSize="12sp"/>
-            <EditText android:id="@+id/vaultMsg" android:layout_width="0dp" android:layout_weight="1"
-                android:layout_height="40dp" android:hint="Message chiffré" android:textColor="#FFF" android:textSize="12sp" android:layout_marginStart="8dp"/>
+            <androidx.recyclerview.widget.RecyclerView android:id="@+id/timeline"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" android:layout_marginTop="16dp"/>
         </LinearLayout>
-        <Button android:id="@+id/btnSendVault" android:layout_width="match_parent" android:layout_height="40dp"
-            android:text="Envoyer via DATA SMS chiffré" android:textSize="12sp" android:backgroundTint="#9C27B0" android:layout_marginTop="6dp"/>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

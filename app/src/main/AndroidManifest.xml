@@ -4,18 +4,12 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <application
-        android:allowBackup="false"
-        android:label="HUNTR/X Journal Adulte"
-        android:theme="@style/Theme.Diary2">
+    <application android:allowBackup="false" android:label="HUNTR/X Glass" android:theme="@style/Theme.Diary2">
         <activity android:name=".MainActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
         </activity>
+        <activity android:name=".VaultActivity" android:exported="false" android:label="Coffre Privé"/>
         <receiver android:name=".DataSmsReceiver" android:exported="true" android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="#0A0A0F" android:padding="16dp">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/btnBack" android:layout_width="40dp" android:layout_height="40dp"
+            android:text="‹" android:textSize="24sp" android:textColor="#FFF" android:gravity="center"
+            android:background="#1E1E2E"/>
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:text="🌙 Coffre Privé - DATA SMS 8090" android:textColor="#FFD700"
+            android:textStyle="bold" android:layout_marginStart="12dp"/>
+        <TextView android:id="@+id/btnClearHistory" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Effacer" android:textColor="#FF69B4" android:padding="8dp"/>
+    </LinearLayout>
+
+    <!-- Contacts enregistrés -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="CONTACTS ENREGISTRÉS" android:textColor="#77778A" android:textSize="10sp" android:layout_marginTop="16dp"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvContacts"
+        android:layout_width="match_parent" android:layout_height="80dp" android:orientation="horizontal"/>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginTop="12dp">
+        <EditText android:id="@+id/etContactName" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="44dp" android:hint="Nom" android:textColor="#FFF" android:background="#1A1A24" android:padding="8dp"/>
+        <EditText android:id="@+id/etContactNumber" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="44dp" android:hint="Numéro" android:textColor="#FFF" android:background="#1A1A24"
+            android:layout_marginStart="8dp" android:inputType="phone" android:padding="8dp"/>
+        <Button android:id="@+id/btnSaveContact" android:layout_width="wrap_content" android:layout_height="44dp"
+            android:text="+" android:backgroundTint="#FFD700" android:textColor="#000" android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Envoi -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginTop="16dp" android:background="#1A1A24" android:padding="12dp">
+        <EditText android:id="@+id/vaultDest" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="44dp" android:hint="Numéro destinataire" android:textColor="#FFF" android:inputType="phone"/>
+        <Button android:id="@+id/btnSendVault" android:layout_width="wrap_content" android:layout_height="44dp"
+            android:text="Envoyer chiffré" android:backgroundTint="#9C27B0" android:layout_marginStart="8dp"/>
+    </LinearLayout>
+    <EditText android:id="@+id/vaultMsg" android:layout_width="match_parent" android:layout_height="80dp"
+        android:hint="Message vault..." android:textColor="#FFF" android:background="#1A1A24" android:layout_marginTop="8dp" android:padding="12dp" android:gravity="top"/>
+
+    <!-- Historique conversations -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="HISTORIQUE CONVERSATIONS" android:textColor="#77778A" android:textSize="10sp" android:layout_marginTop="16dp"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvHistory"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="8dp"/>
+</LinearLayout>

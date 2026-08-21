@@ -1,6 +1,8 @@
 package com.thibaut.diary2
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
@@ -21,7 +23,9 @@ class MainActivity : AppCompatActivity() {
     private val currentImages = mutableListOf<Uri>()
     private val currentVoices = mutableListOf<File>()
     private var recorder: MediaRecorder? = null
+    private var currentRecordingFile: File? = null
     private var isRecording = false
+    private var player: MediaPlayer? = null
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
@@ -36,7 +40,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.timeline.layoutManager = LinearLayoutManager(this)
-        binding.timeline.adapter = DiaryAdapter(entries)
+        binding.timeline.adapter = DiaryAdapter(entries) { file -> playVoice(file) }
+
+        binding.logoMoon.setOnClickListener {
+            startActivity(Intent(this, VaultActivity::class.java))
+        }
 
         binding.btnImage.setOnClickListener { pickImage.launch("image/*") }
 
@@ -50,21 +58,13 @@ class MainActivity : AppCompatActivity() {
             val entry = DiaryEntry(text, currentImages.toList(), currentVoices.toList(), "Aujourd'hui ${java.text.SimpleDateFormat("HH:mm").format(java.util.Date())}")
             entries.add(0, entry)
             binding.timeline.adapter?.notifyItemInserted(0)
-            // reset éditeur
             binding.entryText.text.clear()
             binding.blocksContainer.removeAllViews()
+            binding.tvRecordingStatus.text = ""
             currentImages.clear()
             currentVoices.clear()
             Toast.makeText(this, "Entrée chiffrée sauvée", Toast.LENGTH_SHORT).show()
         }
-
-        binding.btnSendVault.setOnClickListener {
-            val dest = binding.vaultDest.text.toString()
-            val msg = binding.vaultMsg.text.toString()
-            if (dest.isBlank() || msg.isBlank()) return@setOnClickListener
-            DataSmsSender.sendVaultMessage(dest, msg)
-        }
-
         checkPerms()
     }
 
@@ -79,50 +79,88 @@ class MainActivity : AppCompatActivity() {
 
     private fun startVoiceBlock() {
         try {
-            val file = File(cacheDir, "voice_${System.currentTimeMillis()}.m4a")
+            currentRecordingFile = File(cacheDir, "voice_${System.currentTimeMillis()}.m4a")
             recorder = MediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                setOutputFile(file.absolutePath)
+                setOutputFile(currentRecordingFile!!.absolutePath)
                 prepare()
                 start()
             }
             isRecording = true
             binding.btnVoice.text = "⏹ Stop"
-            Toast.makeText(this, "Enregistrement voix...", Toast.LENGTH_SHORT).show()
-            // stocker fichier pour insertion
-            currentVoices.add(file)
-            // UI waveform simulée
-            val tv = TextView(this).apply { text = "🎙️ Enregistrement en cours... ${file.name}"; setTextColor(0xFFFF69B4.toInt()); setPadding(0,12,0,12) }
-            binding.blocksContainer.addView(tv)
-        } catch (e: Exception) { e.printStackTrace() }
+            binding.tvRecordingStatus.text = "● Enregistrement en cours..."
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erreur micro: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun stopVoiceBlock() {
-        recorder?.stop()
-        recorder?.release()
-        recorder = null
-        isRecording = false
-        binding.btnVoice.text = "🎤 Voix"
+        try {
+            recorder?.apply {
+                stop()
+                release()
+            }
+            recorder = null
+            isRecording = false
+            binding.btnVoice.text = "🎤 Voix"
+            binding.tvRecordingStatus.text = "✓ Voix enregistrée"
+
+            currentRecordingFile?.let { file ->
+                currentVoices.add(file)
+                // Ajoute bloc avec bouton play dans l'éditeur
+                val block = LayoutInflater.from(this).inflate(R.layout.item_voice_block, binding.blocksContainer, false)
+                block.findViewById<TextView>(R.id.tvDuration).text = file.name
+                block.findViewById<TextView>(R.id.btnPlay).setOnClickListener { playVoice(file) }
+                binding.blocksContainer.addView(block)
+            }
+            currentRecordingFile = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            binding.btnVoice.text = "🎤 Voix"
+            isRecording = false
+            binding.tvRecordingStatus.text = "Erreur arrêt: ${e.message}"
+        }
+    }
+
+    private fun playVoice(file: File) {
+        try {
+            player?.release()
+            player = MediaPlayer().apply {
+                setDataSource(file.absolutePath)
+                prepare()
+                start()
+            }
+            Toast.makeText(this, "Lecture ${file.name}", Toast.LENGTH_SHORT).show()
+            player?.setOnCompletionListener { binding.tvRecordingStatus.text = "✓ Lecture terminée" }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Impossible lire: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun checkPerms() {
         val perms = arrayOf(Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_MEDIA_IMAGES)
-        if (perms.any { ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }) {
+        if (perms.any { ActivityCompat.checkSelfPermission(this, it)!= PackageManager.PERMISSION_GRANTED }) {
             ActivityCompat.requestPermissions(this, perms, 1001)
         }
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        recorder?.release()
+        player?.release()
+    }
 }
 
-class DiaryAdapter(private val list: List<DiaryEntry>) : androidx.recyclerview.widget.RecyclerView.Adapter<DiaryAdapter.Holder>() {
-    class Holder(val v: android.view.View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {
-        val tvDate: TextView = v.findViewById(com.thibaut.diary2.R.id.tvDate)
-        val tvText: TextView = v.findViewById(com.thibaut.diary2.R.id.tvText)
-        val images: LinearLayout = v.findViewById(com.thibaut.diary2.R.id.entryImages)
-        val voices: LinearLayout = v.findViewById(com.thibaut.diary2.R.id.entryVoices)
+class DiaryAdapter(private val list: List<DiaryEntry>, private val onPlay: (File)->Unit) : androidx.recyclerview.widget.RecyclerView.Adapter<DiaryAdapter.Holder>() {
+    class Holder(v: android.view.View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {
+        val tvDate: TextView = v.findViewById(R.id.tvDate)
+        val tvText: TextView = v.findViewById(R.id.tvText)
+        val images: LinearLayout = v.findViewById(R.id.entryImages)
+        val voices: LinearLayout = v.findViewById(R.id.entryVoices)
     }
-    override fun onCreateViewHolder(p: android.view.ViewGroup, t: Int) = Holder(LayoutInflater.from(p.context).inflate(com.thibaut.diary2.R.layout.item_entry, p, false))
+    override fun onCreateViewHolder(p: android.view.ViewGroup, t: Int) = Holder(LayoutInflater.from(p.context).inflate(R.layout.item_entry, p, false))
     override fun getItemCount() = list.size
     override fun onBindViewHolder(h: Holder, pos: Int) {
         val e = list[pos]
@@ -135,8 +173,10 @@ class DiaryAdapter(private val list: List<DiaryEntry>) : androidx.recyclerview.w
         }
         h.voices.removeAllViews()
         e.voices.forEach { file ->
-            val tv = TextView(h.itemView.context).apply { text = "🔊 ${file.name} - tap pour écouter"; setTextColor(0xFF9C27B0.toInt()); setPadding(0,8,0,8) }
-            h.voices.addView(tv)
+            val block = LayoutInflater.from(h.itemView.context).inflate(R.layout.item_voice_block, h.voices, false)
+            block.findViewById<TextView>(R.id.tvDuration).text = file.name
+            block.findViewById<TextView>(R.id.btnPlay).setOnClickListener { onPlay(file) }
+            h.voices.addView(block)
         }
     }
 }
