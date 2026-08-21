@@ -1,28 +1,45 @@
 package com.thibaut.diary2
 import android.content.Context
-import android.content.SharedPreferences
+import android.graphics.Color
 
 object ThemeManager {
-    private const val PREF = "huntrx_theme_v3"
-    private fun prefs(c: Context): SharedPreferences = c.getSharedPreferences(PREF, Context.MODE_PRIVATE)
+    private const val PREF = "huntrx_m3_full"
+    fun prefs(c: Context) = c.getSharedPreferences(PREF, Context.MODE_PRIVATE)
 
-    var accentColor: Int = 0xFFFFD700.toInt()
-    var wallpaper: String = "obsidian"
-    var theme: String = "neon"
+    data class FullTheme(
+        var theme: String = "neon",
+        var accent: Int = Color.parseColor("#FFD700"),
+        var secondary: Int = Color.parseColor("#9C27B0"),
+        var tertiary: Int = Color.parseColor("#FF69B4"),
+        var background: Int = Color.parseColor("#0A0A0F"),
+        var surface: Int = Color.parseColor("#15151F"),
+        var wallpaper: String = "obsidian"
+    )
 
-    fun save(c: Context, theme: String, accent: Int, wallpaper: String) {
-        prefs(c).edit().putString("theme", theme).putInt("accent", accent).putString("wall", wallpaper).apply()
-        this.theme = theme; this.accentColor = accent; this.wallpaper = wallpaper
-    }
+    var current = FullTheme()
+
     fun load(c: Context) {
-        theme = prefs(c).getString("theme","neon")!!
-        accentColor = prefs(c).getInt("accent", 0xFFFFD700.toInt())
-        wallpaper = prefs(c).getString("wall","obsidian")!!
+        val p = prefs(c)
+        current = FullTheme(
+            p.getString("theme","neon")!!,
+            p.getInt("accent", Color.parseColor("#FFD700")),
+            p.getInt("secondary", Color.parseColor("#9C27B0")),
+            p.getInt("tertiary", Color.parseColor("#FF69B4")),
+            p.getInt("bg", Color.parseColor("#0A0A0F")),
+            p.getInt("surface", Color.parseColor("#15151F")),
+            p.getString("wall","obsidian")!!
+        )
     }
-    fun wallpaperRes(): Int = when(wallpaper) {
-        "nebula" -> android.R.color.transparent
-        "gold" -> android.R.color.transparent
-        "aurora" -> android.R.color.transparent
-        else -> android.R.color.transparent
+
+    fun save(c: Context) {
+        prefs(c).edit()
+           .putString("theme", current.theme)
+           .putInt("accent", current.accent)
+           .putInt("secondary", current.secondary)
+           .putInt("tertiary", current.tertiary)
+           .putInt("bg", current.background)
+           .putInt("surface", current.surface)
+           .putString("wall", current.wallpaper)
+           .apply()
     }
 }
