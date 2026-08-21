@@ -1,47 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:background="#0A0A0F">
+    android:id="@+id/rootMain" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@drawable/bg_wall_obsidian">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="64dp"
+    <LinearLayout android:layout_width="match_parent" android:layout_height="68dp"
         android:orientation="horizontal" android:gravity="center_vertical"
-        android:paddingHorizontal="20dp" android:background="#12121A">
+        android:paddingHorizontal="20dp" android:background="#12121A" android:elevation="12dp">
         <LinearLayout android:id="@+id/logoMoon" android:layout_width="0dp" android:layout_weight="1"
             android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical">
-            <TextView android:layout_width="32dp" android:layout_height="32dp"
-                android:text="🌙" android:textSize="20sp" android:background="#1E1E2E" android:gravity="center"/>
+            <TextView android:layout_width="36dp" android:layout_height="36dp" android:text="🌙" android:textSize="20sp"
+                android:background="@drawable/bg_3d_card" android:gravity="center"/>
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text=" HUNTR/X JOURNAL" android:textColor="#FFFFFF" android:textStyle="bold" android:layout_marginStart="8dp"/>
+                android:text=" HUNTR/X" android:textColor="#FFF" android:textStyle="bold" android:textSize="15sp" android:layout_marginStart="10dp"/>
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text=" GLASS" android:textColor="#FFD700" android:textSize="10sp"/>
+                android:text=" 3D GLASS" android:textColor="#FFD700" android:textSize="10sp" android:letterSpacing="0.1"/>
         </LinearLayout>
-        <TextView android:layout_width="8dp" android:layout_height="8dp" android:background="#00FF88"/>
+        <TextView android:id="@+id/btnTheme" android:layout_width="40dp" android:layout_height="40dp"
+            android:text="🎨" android:gravity="center" android:background="@drawable/bg_3d_card"/>
+    </LinearLayout>
+
+    <!-- Sélecteur thème/couleurs/fond - caché par défaut -->
+    <LinearLayout android:id="@+id/themePanel" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:background="#1A1A24" android:padding="14dp" android:visibility="gone">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="THÈME" android:textColor="#77778A" android:textSize="10sp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <Button android:id="@+id/thObsidian" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Obsidian" android:textSize="10sp" android:backgroundTint="#0A0A0F"/>
+            <Button android:id="@+id/thNeon" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Neon" android:textSize="10sp" android:backgroundTint="#9C27B0" android:layout_marginStart="6dp"/>
+            <Button android:id="@+id/thFrost" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Frost" android:textSize="10sp" android:backgroundTint="#E0E0E0" android:textColor="#000" android:layout_marginStart="6dp"/>
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="COULEUR ACCENT" android:textColor="#77778A" android:textSize="10sp" android:layout_marginTop="12dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <View android:id="@+id/cGold" android:layout_width="36dp" android:layout_height="36dp" android:background="#FFD700"/>
+            <View android:id="@+id/cViolet" android:layout_width="36dp" android:layout_height="36dp" android:background="#9C27B0" android:layout_marginStart="8dp"/>
+            <View android:id="@+id/cRose" android:layout_width="36dp" android:layout_height="36dp" android:background="#FF69B4" android:layout_marginStart="8dp"/>
+            <View android:id="@+id/cCyan" android:layout_width="36dp" android:layout_height="36dp" android:background="#00E5FF" android:layout_marginStart="8dp"/>
+            <View android:id="@+id/cGreen" android:layout_width="36dp" android:layout_height="36dp" android:background="#00FF88" android:layout_marginStart="8dp"/>
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FOND D'ÉCRAN" android:textColor="#77778A" android:textSize="10sp" android:layout_marginTop="12dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <Button android:id="@+id/wObsidian" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Noir" android:textSize="10sp"/>
+            <Button android:id="@+id/wNebula" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Nebula" android:textSize="10sp" android:layout_marginStart="6dp"/>
+            <Button android:id="@+id/wGold" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Gold" android:textSize="10sp" android:layout_marginStart="6dp"/>
+            <Button android:id="@+id/wAurora" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:text="Aurora" android:textSize="10sp" android:layout_marginStart="6dp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="vertical" android:background="#1A1A24" android:padding="16dp">
+                android:orientation="vertical" android:background="@drawable/bg_3d_card" android:padding="18dp" android:elevation="8dp">
                 <EditText android:id="@+id/entryText" android:layout_width="match_parent"
-                    android:layout_height="100dp" android:background="@null"
-                    android:hint="Écris ton entrée secrète..." android:textColor="#FFF" android:textColorHint="#55556A"/>
+                    android:layout_height="110dp" android:background="@null"
+                    android:hint="Écris ton entrée secrète..." android:textColor="#FFF" android:textColorHint="#55556A" android:textSize="15sp"/>
                 <LinearLayout android:id="@+id/blocksContainer" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp"/>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="16dp">
-                    <Button android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
-                        android:text="📷 Image" android:backgroundTint="#232334" android:textColor="#FFF"/>
-                    <Button android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
-                        android:text="🎤 Voix" android:backgroundTint="#232334" android:textColor="#FFF" android:layout_marginStart="8dp"/>
-                    <Button android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
-                        android:text="Sauver" android:backgroundTint="#FFD700" android:textColor="#000" android:layout_marginStart="8dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="18dp">
+                    <Button android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp"
+                        android:text="📷" android:background="@drawable/bg_3d_card" android:textColor="#FFF" android:elevation="4dp"/>
+                    <Button android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp"
+                        android:text="🎤" android:background="@drawable/bg_3d_card" android:textColor="#FFF" android:layout_marginStart="10dp" android:elevation="4dp"/>
+                    <Button android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1.5" android:layout_height="50dp"
+                        android:text="Sauver" android:backgroundTint="#FFD700" android:textColor="#000" android:layout_marginStart="10dp" android:elevation="6dp"/>
                 </LinearLayout>
                 <TextView android:id="@+id/tvRecordingStatus" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="" android:textColor="#FF69B4" android:textSize="12sp" android:layout_marginTop="8dp"/>
+                    android:text="" android:textColor="#FF69B4" android:textSize="11sp" android:layout_marginTop="8dp"/>
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView android:id="@+id/timeline"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" android:layout_marginTop="16dp"/>
+                android:nestedScrollingEnabled="false" android:layout_marginTop="18dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
