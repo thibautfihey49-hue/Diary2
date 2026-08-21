@@ -1,49 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:background="#0A0A0F" android:padding="16dp">
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:background="@drawable/bg_glass_card" android:padding="12dp">
-        <TextView android:id="@+id/btnBack" android:layout_width="40dp" android:layout_height="40dp"
-            android:text="‹" android:textSize="22sp" android:textColor="#FFF" android:gravity="center"
-            android:background="@drawable/bg_glass_chip"/>
-        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-            android:text=" 🌙 COFFRE PRIVE" android:textColor="#FFD700" android:textStyle="bold" android:textSize="14sp"/>
-        <TextView android:id="@+id/btnClearHistory" android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Effacer" android:textColor="#FF69B4" android:background="@drawable/bg_glass_chip" android:paddingHorizontal="14dp" android:paddingVertical="8dp" android:textSize="11sp"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_aurora_blur">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="12dp">
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            app:cardCornerRadius="24dp" app:cardBackgroundColor="#B315151F" app:strokeWidth="1dp" app:strokeColor="#22FFFFFF" app:cardElevation="14dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="12dp">
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnBack" android:layout_width="48dp" android:layout_height="48dp"
+                    android:text="‹" android:textSize="20sp" style="@style/Widget.Material3.Button.IconButton" android:insetTop="0dp" android:insetBottom="0dp"/>
+                <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                    android:text="🌙 COFFRE PRIVE" android:textColor="#FFD700" android:textStyle="bold" android:textSize="16sp" android:layout_marginStart="8dp"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnEffacer"
+                    android:layout_width="wrap_content" android:layout_height="40dp" android:text="Effacer" style="@style/Widget.Material3.Button.TonalButton"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <TextView android:text="CONTACTS" android:textColor="#666" android:textSize="11sp" android:layout_marginTop="18dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <LinearLayout android:id="@+id/contactsContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="8dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+            <EditText android:id="@+id/etContactName" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
+                android:hint="Nom" android:background="@drawable/bg_glass_input" android:textColor="#FFF" android:paddingHorizontal="16dp"/>
+            <EditText android:id="@+id/etContactNumber" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
+                android:hint="Numéro" android:background="@drawable/bg_glass_input" android:textColor="#FFF" android:paddingHorizontal="16dp" android:layout_marginStart="8dp" android:inputType="phone"/>
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnAddContact" android:layout_width="56dp" android:layout_height="56dp"
+                android:text="+" android:textSize="22sp" style="@style/Widget.Material3.Button" android:layout_marginStart="8dp" app:cornerRadius="28dp"/>
+        </LinearLayout>
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp" app:cardBackgroundColor="#9915151F" app:strokeColor="#22FF69B4" app:strokeWidth="1dp" app:cardElevation="16dp" android:layout_marginTop="18dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp">
+                <EditText android:id="@+id/etDestNumber" android:layout_width="match_parent" android:layout_height="56dp"
+                    android:hint="Numéro" android:textColor="#FFF" android:background="@drawable/bg_glass_input" android:paddingHorizontal="16dp"/>
+                <EditText android:id="@+id/etMessage" android:layout_width="match_parent" android:layout_height="100dp"
+                    android:hint="Message" android:textColor="#FFF" android:background="@drawable/bg_glass_input" android:padding="12dp" android:gravity="top" android:layout_marginTop="10dp"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSendEncrypted"
+                    android:layout_width="match_parent" android:layout_height="56dp" android:text="🔒 Envoyer via DATA SMS chiffré"
+                    android:layout_marginTop="14dp" style="@style/Widget.Material3.Button" app:cornerRadius="18dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <TextView android:text="HISTORIQUE" android:textColor="#666" android:textSize="11sp" android:layout_marginTop="18dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <LinearLayout android:id="@+id/historyContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="8dp"/>
     </LinearLayout>
-
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="CONTACTS" android:textColor="#66667A" android:textSize="10sp" android:letterSpacing="0.1" android:layout_marginTop="20dp"/>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvContacts"
-        android:layout_width="match_parent" android:layout_height="72dp" android:layout_marginTop="8dp"/>
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:layout_marginTop="12dp">
-        <EditText android:id="@+id/etContactName" android:layout_width="0dp" android:layout_weight="1"
-            android:layout_height="48dp" android:hint="Nom" android:textColor="#FFF" android:textColorHint="#55556A"
-            android:background="@drawable/bg_glass_card" android:padding="12dp"/>
-        <EditText android:id="@+id/etContactNumber" android:layout_width="0dp" android:layout_weight="1"
-            android:layout_height="48dp" android:hint="Numéro" android:textColor="#FFF" android:textColorHint="#55556A"
-            android:background="@drawable/bg_glass_card" android:layout_marginStart="8dp" android:inputType="phone" android:padding="12dp"/>
-        <Button android:id="@+id/btnSaveContact" android:layout_width="48dp" android:layout_height="48dp"
-            android:text="+" android:textSize="18sp" android:backgroundTint="#FFD700" android:textColor="#000" android:layout_marginStart="8dp"/>
-    </LinearLayout>
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical" android:background="@drawable/bg_glass_card" android:padding="14dp" android:layout_marginTop="20dp">
-        <EditText android:id="@+id/vaultDest" android:layout_width="match_parent"
-            android:layout_height="48dp" android:hint="Numéro destinataire" android:textColor="#FFF" android:background="#0A0A0F" android:padding="12dp" android:inputType="phone"/>
-        <EditText android:id="@+id/vaultMsg" android:layout_width="match_parent" android:layout_height="80dp"
-            android:hint="Message chiffré..." android:textColor="#FFF" android:background="#0A0A0F" android:layout_marginTop="8dp" android:padding="12dp" android:gravity="top"/>
-        <Button android:id="@+id/btnSendVault" android:layout_width="match_parent" android:layout_height="48dp"
-            android:text="🔒 Envoyer via DATA SMS chiffré" android:backgroundTint="#9C27B0" android:layout_marginTop="12dp"/>
-    </LinearLayout>
-
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="HISTORIQUE" android:textColor="#66667A" android:textSize="10sp" android:layout_marginTop="20dp"/>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvHistory"
-        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="8dp"/>
-</LinearLayout>
+</FrameLayout>
