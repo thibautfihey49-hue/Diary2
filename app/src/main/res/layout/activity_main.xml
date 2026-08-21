@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootMain" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/bg_aurora_blur">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootMain" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#0A0A0F">
 
-    <View android:layout_width="300dp" android:layout_height="300dp" android:layout_gravity="top|start"
-        android:background="@drawable/bg_wall_nebula" android:alpha="0.4"/>
-    <View android:layout_width="250dp" android:layout_height="250dp" android:layout_gravity="bottom|end"
-        android:background="@drawable/bg_wall_gold" android:alpha="0.25"/>
+    <ImageView android:id="@+id/ivCustomWallpaper" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:visibility="gone"/>
+    <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#AA0A0A0F"/>
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="64dp"
-            android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="16dp"
-            android:background="#B312121A" android:elevation="10dp">
-            <LinearLayout android:id="@+id/logoMoon" android:layout_width="0dp" android:layout_weight="1"
-                android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:layout_width="40dp" android:layout_height="40dp" android:text="🌙"
-                    android:gravity="center" android:textSize="20sp" android:background="@drawable/bg_glass_button" android:elevation="4dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text=" HUNTR/X" android:textColor="#FFF" android:textStyle="bold" android:textSize="16sp" android:layout_marginStart="10dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text=" GLASS 3D" android:textColor="#FFD700" android:textSize="10sp" android:layout_marginStart="6dp" android:letterSpacing="0.08"/>
+        <LinearLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="64dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="16dp" android:background="#B312121A" android:elevation="10dp">
+            <LinearLayout android:id="@+id/logoMoon" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="40dp" android:layout_height="40dp" android:text="🌙" android:gravity="center" android:textSize="20sp" android:background="@drawable/bg_glass_button" android:elevation="4dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" HUNTR/X" android:textColor="#FFF" android:textStyle="bold" android:textSize="16sp" android:layout_marginStart="10dp"/>
+                <TextView android:id="@+id/tvAccentDot" android:layout_width="8dp" android:layout_height="8dp" android:layout_marginStart="8dp" android:background="#FFD700"/>
             </LinearLayout>
-            <com.google.android.material.button.MaterialButton android:id="@+id/btnTheme"
-                android:layout_width="44dp" android:layout_height="44dp" android:insetTop="0dp" android:insetBottom="0dp"
-                app:icon="@android:drawable/ic_menu_preferences" style="@style/Widget.Material3.Button.IconButton" android:alpha="0.9"/>
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnWallpaper" android:layout_width="44dp" android:layout_height="44dp" android:text="🖼️" style="@style/Widget.Material3.Button.IconButton" android:insetTop="0dp" android:insetBottom="0dp"/>
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnTheme" android:layout_width="44dp" android:layout_height="44dp" app:icon="@android:drawable/ic_menu_preferences" style="@style/Widget.Material3.Button.IconButton" android:insetTop="0dp" android:insetBottom="0dp" android:layout_marginStart="4dp"/>
         </LinearLayout>
 
-        <LinearLayout android:id="@+id/themePanel" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="vertical" android:background="#CC1A1A24" android:padding="16dp" android:visibility="gone" android:elevation="8dp">
-            <TextView android:text="VERRE 3D + COULEURS" android:textColor="#888" android:textSize="11sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <LinearLayout android:id="@+id/themePanel" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#CC1A1A24" android:padding="16dp" android:visibility="gone" android:elevation="8dp">
+            <TextView android:text="COULEUR GLOBALE - MODIFIE TOUT" android:textColor="#888" android:textSize="11sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp">
                 <View android:id="@+id/cGold" android:layout_width="44dp" android:layout_height="44dp" android:background="#FFD700" android:elevation="6dp"/>
                 <View android:id="@+id/cViolet" android:layout_width="44dp" android:layout_height="44dp" android:background="#9C27B0" android:layout_marginStart="10dp" android:elevation="6dp"/>
                 <View android:id="@+id/cRose" android:layout_width="44dp" android:layout_height="44dp" android:background="#FF69B4" android:layout_marginStart="10dp" android:elevation="6dp"/>
                 <View android:id="@+id/cCyan" android:layout_width="44dp" android:layout_height="44dp" android:background="#00E5FF" android:layout_marginStart="10dp" android:elevation="6dp"/>
                 <View android:id="@+id/cGreen" android:layout_width="44dp" android:layout_height="44dp" android:background="#00FF88" android:layout_marginStart="10dp" android:elevation="6dp"/>
+                <View android:id="@+id/cOrange" android:layout_width="44dp" android:layout_height="44dp" android:background="#FF6B35" android:layout_marginStart="10dp" android:elevation="6dp"/>
             </LinearLayout>
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnResetWall" android:layout_width="wrap_content" android:layout_height="36dp" android:text="Retirer fond perso" android:layout_marginTop="12dp" style="@style/Widget.Material3.Button.TonalButton"/>
         </LinearLayout>
 
         <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                <com.google.android.material.card.MaterialCardView android:id="@+id/mainCard" android:layout_width="match_parent" android:layout_height="wrap_content"
                     app:cardCornerRadius="28dp" app:strokeWidth="1dp" app:strokeColor="#22FFD700" app:cardBackgroundColor="#9915151F" app:cardElevation="18dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="22dp">
                         <EditText android:id="@+id/entryText" android:layout_width="match_parent" android:layout_height="110dp"
@@ -49,18 +39,14 @@
                             android:textColorHint="#66FFFFFF" android:textSize="15sp" android:padding="14dp"/>
                         <LinearLayout android:id="@+id/blocksContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="14dp"/>
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="20dp">
-                            <com.google.android.material.button.MaterialButton android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
-                                android:text="📷" style="@style/Widget.Material3.Button.TonalButton" app:cornerRadius="18dp"/>
-                            <com.google.android.material.button.MaterialButton android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
-                                android:text="🎤" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button.TonalButton" app:cornerRadius="18dp"/>
-                            <com.google.android.material.button.MaterialButton android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1.2" android:layout_height="56dp"
-                                android:text="Sauver" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button" app:cornerRadius="18dp"/>
+                            <com.google.android.material.button.MaterialButton android:id="@+id/btnImage" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="📷" style="@style/Widget.Material3.Button.TonalButton" app:cornerRadius="18dp"/>
+                            <com.google.android.material.button.MaterialButton android:id="@+id/btnVoice" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="🎤" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button.TonalButton" app:cornerRadius="18dp"/>
+                            <com.google.android.material.button.MaterialButton android:id="@+id/btnSave" android:layout_width="0dp" android:layout_weight="1.2" android:layout_height="56dp" android:text="Sauver" android:layout_marginStart="10dp" style="@style/Widget.Material3.Button" app:cornerRadius="18dp"/>
                         </LinearLayout>
                         <TextView android:id="@+id/tvRecordingStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textColor="#FF69B4" android:textSize="12sp" android:layout_marginTop="10dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-                <androidx.recyclerview.widget.RecyclerView android:id="@+id/timeline"
-                    android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" android:layout_marginTop="20dp"/>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/timeline" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" android:layout_marginTop="20dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
