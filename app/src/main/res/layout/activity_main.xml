@@ -58,7 +58,7 @@
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:orientation="vertical" android:padding="20dp">
 
-                    <EditText android:id="@+id/entryText" android:layout_width="match_parent"
+                    <EditText android:id="@+id/entryText" android:imeOptions="actionSend" android:inputType="textMultiLine|textCapSentences" android:layout_width="match_parent"
                         android:layout_height="140dp" android:background="@android:color/transparent"
                         android:hint="Écris ton entrée secrète..." android:textColor="#121216"
                         android:textColorHint="#80000000" android:textSize="15sp"
